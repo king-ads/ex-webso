@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cute Pink Ministore</title>
+    <title>Ministore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -11,13 +11,8 @@
     <script>
         tailwind.config = {
             theme: {
-                extend: {
-                    colors: {
-                        pink: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777' }
-                    },
-                    fontFamily: { sans: ['Kanit', 'sans-serif'] }
-                }
-            }
+                extend: { colors: { pink: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777' } },
+                          fontFamily: { sans: ['Kanit', 'sans-serif'] } }
         }
     </script>
     <style>
@@ -38,10 +33,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
-                    <div class="w-10 h-10 bg-pink-400 text-white rounded-full flex items-center justify-center text-xl shadow-md">
-                        <i class="fas fa-store"></i>
-                    </div>
-                    <span class="font-bold text-xl text-pink-600 hidden sm:block">SweetStore</span>
+                    <img id="display-logo-img" src="" class="w-10 h-10 rounded-full object-cover shadow-md hidden">
+                    <div id="display-logo-icon" class="w-10 h-10 bg-pink-400 text-white rounded-full flex items-center justify-center text-xl shadow-md"><i class="fas fa-store"></i></div>
+                    <span class="font-bold text-xl text-pink-600 hidden sm:block display-store-name">SweetStore</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -74,17 +68,13 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         
         <div id="page-home" class="page-section animate-fade-in">
-            <div class="w-full h-48 sm:h-72 bg-pink-200 rounded-3xl overflow-hidden shadow-sm mb-8 relative border-4 border-white">
+            <a id="site-banner-link" target="_blank" class="block w-full h-48 sm:h-72 bg-pink-200 rounded-3xl overflow-hidden shadow-sm mb-8 relative border-4 border-white transition hover:opacity-95">
                 <img id="site-banner" src="" class="w-full h-full object-cover" alt="Banner">
                 <div id="banner-loader" class="absolute inset-0 flex items-center justify-center bg-pink-100 text-pink-400"><i class="fas fa-spinner fa-spin text-3xl"></i></div>
-            </div>
-
-            <div class="flex justify-between items-center mb-6 px-2">
-                <h2 class="text-2xl font-bold"><i class="fas fa-star text-yellow-400 mr-2"></i>สินค้าแนะนำ</h2>
-            </div>
+            </a>
             
-            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                </div>
+            <div class="flex justify-between items-center mb-6 px-2"><h2 class="text-2xl font-bold"><i class="fas fa-star text-yellow-400 mr-2"></i>สินค้าแนะนำ</h2></div>
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></div>
         </div>
 
         <div id="page-login" class="page-section hidden animate-fade-in max-w-md mx-auto mt-10">
@@ -94,19 +84,11 @@
                     <h2 class="text-2xl font-bold text-pink-600">เข้าสู่ระบบ</h2>
                 </div>
                 <form id="form-login" onsubmit="handleAuth(event, 'login')">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1 ml-1">UserID หรือ Email</label>
-                        <input type="text" id="log-user" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium mb-1 ml-1">รหัสผ่าน</label>
-                        <input type="password" id="log-pass" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
+                    <div class="mb-4"><label class="block text-sm font-medium mb-1 ml-1">UserID หรือ Email</label><input type="text" id="log-user" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
+                    <div class="mb-6"><label class="block text-sm font-medium mb-1 ml-1">รหัสผ่าน</label><input type="password" id="log-pass" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
                     <button type="submit" id="btn-login-submit" class="w-full btn-pink py-3 rounded-xl font-bold shadow-md text-lg">เข้าสู่ระบบ <i class="fas fa-arrow-right ml-1"></i></button>
                 </form>
-                <div class="text-center mt-6 text-sm">
-                    <p>ยังไม่มีบัญชี? <a href="#" onclick="navigate('register')" class="text-pink-600 font-bold hover:underline">สมัครสมาชิกที่นี่</a></p>
-                </div>
+                <div class="text-center mt-6 text-sm"><p>ยังไม่มีบัญชี? <a href="#" onclick="navigate('register')" class="text-pink-600 font-bold hover:underline">สมัครสมาชิกที่นี่</a></p></div>
             </div>
         </div>
 
@@ -117,27 +99,13 @@
                     <h2 class="text-2xl font-bold text-pink-600">สมัครสมาชิก</h2>
                 </div>
                 <form id="form-register" onsubmit="handleAuth(event, 'register')">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1 ml-1">UserID</label>
-                        <input type="text" id="reg-user" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1 ml-1">Email</label>
-                        <input type="email" id="reg-email" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1 ml-1">รหัสผ่าน</label>
-                        <input type="password" id="reg-pass" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium mb-1 ml-1">ยืนยันรหัสผ่าน</label>
-                        <input type="password" id="reg-pass-conf" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
+                    <div class="mb-4"><label class="block text-sm font-medium mb-1 ml-1">UserID</label><input type="text" id="reg-user" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
+                    <div class="mb-4"><label class="block text-sm font-medium mb-1 ml-1">Email</label><input type="email" id="reg-email" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
+                    <div class="mb-4"><label class="block text-sm font-medium mb-1 ml-1">รหัสผ่าน</label><input type="password" id="reg-pass" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
+                    <div class="mb-6"><label class="block text-sm font-medium mb-1 ml-1">ยืนยันรหัสผ่าน</label><input type="password" id="reg-pass-conf" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
                     <button type="submit" id="btn-reg-submit" class="w-full btn-pink py-3 rounded-xl font-bold shadow-md text-lg">สมัครสมาชิก <i class="fas fa-check-circle ml-1"></i></button>
                 </form>
-                <div class="text-center mt-6 text-sm">
-                    <p>มีบัญชีอยู่แล้ว? <a href="#" onclick="navigate('login')" class="text-pink-600 font-bold hover:underline">เข้าสู่ระบบ</a></p>
-                </div>
+                <div class="text-center mt-6 text-sm"><p>มีบัญชีอยู่แล้ว? <a href="#" onclick="navigate('login')" class="text-pink-600 font-bold hover:underline">เข้าสู่ระบบ</a></p></div>
             </div>
         </div>
 
@@ -149,19 +117,9 @@
                     <img id="qr-image" src="" class="w-48 h-48 object-cover rounded-xl shadow-sm" alt="QR Code">
                 </div>
                 <form id="form-topup" onsubmit="handleTopup(event)" class="text-left space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1 ml-1">จำนวนเงินที่โอน (บาท)</label>
-                        <input type="number" id="topup-amount" required min="1" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1 ml-1">อัปโหลดสลิป</label>
-                        <input type="file" id="topup-slip" accept="image/*" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-pink-100 file:text-pink-600 hover:file:bg-pink-200 transition">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1 ml-1">เลขท้ายสลิป 6 หลัก</label>
-                        <input type="text" id="topup-ref" required pattern="^[A-Za-z0-9]{6}$" maxlength="6" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 uppercase" placeholder="เช่น A1B23C">
-                        <p class="text-xs text-pink-400 mt-2 ml-1"><i class="fas fa-info-circle"></i> ตรวจสอบตัวอักษรและตัวเลขให้ถูกต้องก่อนกดยืนยัน</p>
-                    </div>
+                    <div><label class="block text-sm font-medium mb-1 ml-1">จำนวนเงินที่โอน (บาท)</label><input type="number" id="topup-amount" required min="1" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"></div>
+                    <div><label class="block text-sm font-medium mb-1 ml-1">อัปโหลดสลิป</label><input type="file" id="topup-slip" accept="image/*" required class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-pink-100 file:text-pink-600 hover:file:bg-pink-200 transition"></div>
+                    <div><label class="block text-sm font-medium mb-1 ml-1">เลขท้ายสลิป 6 หลัก</label><input type="text" id="topup-ref" required pattern="^[A-Za-z0-9]{6}$" maxlength="6" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 uppercase" placeholder="เช่น A1B23C"><p class="text-xs text-pink-400 mt-2 ml-1"><i class="fas fa-info-circle"></i> ตรวจสอบตัวอักษรและตัวเลขให้ถูกต้องก่อนกดยืนยัน</p></div>
                     <button type="submit" id="btn-topup-submit" class="w-full btn-pink py-3 rounded-xl font-bold shadow-md mt-6 text-lg">ยืนยันการเติมเงิน <i class="fas fa-paper-plane ml-1"></i></button>
                 </form>
             </div>
@@ -188,32 +146,19 @@
                 <h3 class="font-bold text-lg mb-4 text-pink-600"><i class="fas fa-plus-circle mr-2"></i>เพิ่มสินค้าใหม่</h3>
                 <form id="form-add-product" onsubmit="adminSubmitProduct(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-pink-50 p-6 rounded-2xl border border-pink-100">
                     <input type="text" id="ap-name" placeholder="ชื่อสินค้า" required class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
-                    <select id="ap-category" class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
-                        <option value="app">แอพพรีเมียม</option>
-                        <option value="game">เติมเกม</option>
-                    </select>
+                    <select id="ap-category" class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none"><option value="app">แอพพรีเมียม</option><option value="game">เติมเกม</option></select>
                     <input type="number" id="ap-price" placeholder="ราคา (บาท)" required class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
-                    <select id="ap-status" class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
-                        <option value="Active">เปิดขาย</option>
-                        <option value="Inactive">ปิดการขาย</option>
-                    </select>
+                    <select id="ap-status" class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none"><option value="Active">เปิดขาย</option><option value="Inactive">ปิดการขาย</option></select>
                     <input type="text" id="ap-image" placeholder="URL รูปภาพสินค้า" required class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none md:col-span-2">
                     <input type="text" id="ap-details" placeholder="รายละเอียดแบบสั้น" required class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
-                    <input type="text" id="ap-info" placeholder="รายละเอียดเพิ่มเติม" required class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
+                    <input type="text" id="ap-info" placeholder="รายละเอียดเพิ่มเติม (รหัส, ข้อมูลส่ง)" required class="px-4 py-2 rounded-xl border focus:ring-2 focus:ring-pink-400 outline-none">
                     <button type="submit" id="btn-admin-add" class="btn-pink py-2 rounded-xl font-bold md:col-span-2 mt-2"><i class="fas fa-save mr-1"></i> บันทึกสินค้า</button>
                 </form>
 
                 <h3 class="font-bold text-lg mb-4 text-pink-600"><i class="fas fa-boxes mr-2"></i>รายการสินค้า</h3>
                 <div class="overflow-x-auto rounded-xl border border-pink-100">
                     <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-pink-100 text-pink-700">
-                                <th class="p-4 font-bold">ชื่อสินค้า</th>
-                                <th class="p-4 font-bold">หมวดหมู่</th>
-                                <th class="p-4 font-bold">ราคา</th>
-                                <th class="p-4 font-bold text-center">จัดการ</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="bg-pink-100 text-pink-700"><th class="p-4 font-bold">ชื่อสินค้า</th><th class="p-4 font-bold">หมวดหมู่</th><th class="p-4 font-bold">ราคา</th><th class="p-4 font-bold text-center">จัดการ</th></tr></thead>
                         <tbody id="admin-product-list" class="text-sm divide-y divide-pink-50"></tbody>
                     </table>
                 </div>
@@ -223,42 +168,38 @@
                 <h3 class="font-bold text-lg mb-4 text-pink-600"><i class="fas fa-user-edit mr-2"></i>จัดการผู้ใช้งาน</h3>
                 <div class="overflow-x-auto rounded-xl border border-pink-100">
                     <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-pink-100 text-pink-700">
-                                <th class="p-4 font-bold">UserID</th>
-                                <th class="p-4 font-bold text-center">ยอดเงิน (฿)</th>
-                                <th class="p-4 font-bold text-center">สิทธิ์</th>
-                                <th class="p-4 font-bold text-center">บันทึก</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="bg-pink-100 text-pink-700"><th class="p-4 font-bold">UserID</th><th class="p-4 font-bold text-center">ยอดเงิน (฿)</th><th class="p-4 font-bold text-center">สิทธิ์</th><th class="p-4 font-bold text-center">บันทึก</th></tr></thead>
                         <tbody id="admin-user-list" class="text-sm divide-y divide-pink-50"></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="admin-tab-settings" class="admin-tab-content hidden bg-white p-6 rounded-3xl shadow-sm border border-pink-100">
-                <h3 class="font-bold text-lg mb-4 text-pink-600"><i class="fas fa-paint-brush mr-2"></i>ตั้งค่าเว็บไซต์</h3>
-                <div class="space-y-6 max-w-2xl">
+                <h3 class="font-bold text-lg mb-4 text-pink-600"><i class="fas fa-paint-brush mr-2"></i>ตั้งค่าแบรนด์และเว็บไซต์</h3>
+                <div class="space-y-5 max-w-2xl">
                     <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
-                        <label class="text-sm font-bold mb-2 block text-pink-700">Banner URL (รูปหน้าแรก)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="set-banner" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400">
-                            <button onclick="adminSaveSetting('Banner_URL', 'set-banner')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button>
-                        </div>
+                        <label class="text-sm font-bold mb-2 block text-pink-700">ชื่อร้าน (Store Name)</label>
+                        <div class="flex gap-2"><input type="text" id="set-store" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('StoreName', 'set-store')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                        <label class="text-sm font-bold mb-2 block text-pink-700">Logo URL (ลิงก์รูปโลโก้ / ว่างไว้ถ้าใช้ไอคอน)</label>
+                        <div class="flex gap-2"><input type="text" id="set-logo" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('Logo_URL', 'set-logo')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                        <label class="text-sm font-bold mb-2 block text-pink-700">Banner URL (รูปปกหน้าแรก)</label>
+                        <div class="flex gap-2"><input type="text" id="set-banner" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('Banner_URL', 'set-banner')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                        <label class="text-sm font-bold mb-2 block text-pink-700">Banner Link (ลิงก์ปลายทางเมื่อคลิกแบนเนอร์)</label>
+                        <div class="flex gap-2"><input type="text" id="set-banner-link" placeholder="เช่น https://facebook.com/..." class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('Banner_Link', 'set-banner-link')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
                     </div>
                     <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
                         <label class="text-sm font-bold mb-2 block text-pink-700">QR Code URL (รูปสำหรับหน้าเติมเงิน)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="set-qr" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400">
-                            <button onclick="adminSaveSetting('QR_Image_URL', 'set-qr')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button>
-                        </div>
+                        <div class="flex gap-2"><input type="text" id="set-qr" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('QR_Image_URL', 'set-qr')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
                     </div>
                     <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
                         <label class="text-sm font-bold mb-2 block text-pink-700">Admin Email (อีเมลรับแจ้งเตือน)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="set-email" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400">
-                            <button onclick="adminSaveSetting('AdminEmail', 'set-email')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button>
-                        </div>
+                        <div class="flex gap-2"><input type="text" id="set-email" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('AdminEmail', 'set-email')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
                     </div>
                 </div>
             </div>
@@ -267,13 +208,13 @@
     </main>
 
     <footer class="mt-16 border-t border-pink-200 py-6 text-center text-sm text-pink-400 font-medium">
-        <p><i class="fas fa-heart text-pink-500"></i> Copyright &copy; 2026 SweetStore. All rights reserved.</p>
+        <p><i class="fas fa-heart text-pink-500"></i> Copyright &copy; 2026 <span class="display-store-name">SweetStore</span>. All rights reserved.</p>
     </footer>
 
     <div id="welcome-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-pink-900/40 backdrop-blur-sm px-4">
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl transform scale-95 transition-all animate-fade-in text-center relative border-2 border-pink-100">
             <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-gradient-to-br from-pink-300 to-pink-500 rounded-full border-4 border-white flex items-center justify-center text-4xl text-white shadow-lg"><i class="fas fa-gift"></i></div>
-            <h3 class="text-2xl font-bold mt-12 mb-3 text-gray-800">ยินดีต้อนรับสู่ SweetStore</h3>
+            <h3 class="text-2xl font-bold mt-12 mb-3 text-gray-800">ยินดีต้อนรับสู่ <span class="display-store-name">SweetStore</span></h3>
             <p class="text-pink-500 text-sm mb-8 leading-relaxed">ศูนย์รวมแอพพรีเมียมและเติมเกมอัตโนมัติ 24 ชม.<br>สะดวก รวดเร็ว ปลอดภัย</p>
             <button onclick="closeModal('welcome-modal')" class="btn-pink px-6 py-3 rounded-full font-bold w-full shadow-md text-lg">เข้าสู่เว็บไซต์</button>
         </div>
@@ -296,7 +237,6 @@
     </div>
 
     <script>
-        // *** ลิงก์ API เชื่อมต่อของคุณถูกตั้งค่าเรียบร้อยแล้ว ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwg_yh10o9lm7RLrUPlybl1jRtzvRYUQIA-b2o5Jx2dEoPAbLsuEM16FCvwWcBKxTDG0Q/exec'; 
 
         let currentUser = JSON.parse(localStorage.getItem('userSession')) || null;
@@ -318,11 +258,7 @@
 
         async function gasAPI(action, payload = {}) {
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action, payload })
-                });
+                const response = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, payload }) });
                 return await response.json();
             } catch (error) {
                 console.error("API Error:", error);
@@ -338,22 +274,12 @@
         }
 
         function navigateMenu(target) {
-            if (!currentUser && target !== 'home') {
-                showAlert('กรุณาเข้าสู่ระบบ', 'คุณต้องเข้าสู่ระบบก่อนจึงจะเข้าใช้งานส่วนนี้ได้', 'warning');
-                return;
-            }
-            if (['inbox', 'topup', 'admin'].includes(target)) {
-                navigate(target);
-                if(target === 'admin') loadAdminData();
-            } else {
-                navigate('home');
-            }
+            if (!currentUser && target !== 'home') { showAlert('กรุณาเข้าสู่ระบบ', 'คุณต้องเข้าสู่ระบบก่อนจึงจะเข้าใช้งานส่วนนี้ได้', 'warning'); return; }
+            if (['inbox', 'topup', 'admin'].includes(target)) { navigate(target); if(target === 'admin') loadAdminData(); } 
+            else { navigate('home'); }
         }
 
-        function toggleMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
-
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
         function showAlert(title, desc, type = 'info') {
@@ -396,11 +322,9 @@
                 payload = { username: document.getElementById('log-user').value, password: document.getElementById('log-pass').value };
             } else {
                 const pass = document.getElementById('reg-pass').value;
-                const conf = document.getElementById('reg-pass-conf').value;
-                if (pass !== conf) {
+                if (pass !== document.getElementById('reg-pass-conf').value) {
                     showAlert('ข้อผิดพลาด', 'รหัสผ่านไม่ตรงกัน', 'error');
-                    resetBtn(btn, 'สมัครสมาชิก <i class="fas fa-check-circle ml-1"></i>');
-                    return;
+                    resetBtn(btn, 'สมัครสมาชิก <i class="fas fa-check-circle ml-1"></i>'); return;
                 }
                 payload = { userId: document.getElementById('reg-user').value, email: document.getElementById('reg-email').value, password: pass };
             }
@@ -410,24 +334,14 @@
             if (res.success) {
                 currentUser = res.data;
                 localStorage.setItem('userSession', JSON.stringify(currentUser));
-                updateUIState();
-                navigate('home');
+                updateUIState(); navigate('home');
                 showAlert('สำเร็จ', type === 'login' ? 'เข้าสู่ระบบสำเร็จ' : 'สมัครสมาชิกสำเร็จ!', 'success');
                 event.target.reset();
-            } else {
-                showAlert('ล้มเหลว', res.error, 'error');
-            }
+            } else { showAlert('ล้มเหลว', res.error, 'error'); }
             resetBtn(btn, type === 'login' ? 'เข้าสู่ระบบ <i class="fas fa-arrow-right ml-1"></i>' : 'สมัครสมาชิก <i class="fas fa-check-circle ml-1"></i>');
         }
 
-        function logout() {
-            localStorage.removeItem('userSession');
-            currentUser = null;
-            updateUIState();
-            navigate('home');
-            showAlert('สำเร็จ', 'ออกจากระบบเรียบร้อยแล้ว', 'success');
-        }
-
+        function logout() { localStorage.removeItem('userSession'); currentUser = null; updateUIState(); navigate('home'); showAlert('สำเร็จ', 'ออกจากระบบเรียบร้อยแล้ว', 'success'); }
         function resetBtn(btn, text) { btn.disabled = false; btn.innerHTML = text; }
 
         // ====== Init Data ======
@@ -437,9 +351,32 @@
                 productsData = res.data.products;
                 renderProducts(productsData);
                 
-                // อัปเดตการตั้งค่าภาพ
-                document.getElementById('site-banner').src = res.data.settings['Banner_URL'] || 'https://via.placeholder.com/1200x400.png?text=Banner';
-                document.getElementById('qr-image').src = res.data.settings['QR_Image_URL'] || 'https://via.placeholder.com/300x300.png?text=QR+Code';
+                // อัปเดตการตั้งค่าแบรนด์
+                const storeName = res.data.settings['StoreName'] || 'SweetStore';
+                document.querySelectorAll('.display-store-name').forEach(el => el.innerText = storeName);
+                
+                const logoUrl = res.data.settings['Logo_URL'];
+                if(logoUrl) {
+                    document.getElementById('display-logo-img').src = logoUrl;
+                    document.getElementById('display-logo-img').classList.remove('hidden');
+                    document.getElementById('display-logo-icon').classList.add('hidden');
+                }
+
+                // อัปเดตแบนเนอร์และ QR
+                document.getElementById('site-banner').src = res.data.settings['Banner_URL'] || '';
+                document.getElementById('qr-image').src = res.data.settings['QR_Image_URL'] || '';
+                
+                // อัปเดตลิงก์แบนเนอร์
+                const bannerLink = res.data.settings['Banner_Link'];
+                const bannerElement = document.getElementById('site-banner-link');
+                if (bannerLink) {
+                    bannerElement.href = bannerLink;
+                    bannerElement.classList.remove('cursor-default');
+                } else {
+                    bannerElement.removeAttribute('href');
+                    bannerElement.classList.add('cursor-default');
+                }
+
                 document.getElementById('banner-loader').classList.add('hidden');
             }
         }
@@ -466,7 +403,7 @@
         }
 
         function openProduct(id) {
-            if (!currentUser) { showAlert('กรุณาเข้าสู่ระบบ', 'สมัครสมาชิกหรือเข้าสู่ระบบเพื่อดูรายละเอียดและสั่งซื้อสินค้า', 'warning'); return; }
+            if (!currentUser) { showAlert('กรุณาเข้าสู่ระบบ', 'สมัครสมาชิกเพื่อสั่งซื้อสินค้า', 'warning'); return; }
             const p = productsData.find(x => x.ProductID === id);
             if(!p) return;
             
@@ -486,60 +423,31 @@
         }
 
         async function confirmBuy(id, name, price) {
-            if(currentUser.balance < price) {
-                showAlert('ยอดเงินไม่พอ', 'กรุณาเติมเงินก่อนสั่งซื้อสินค้า', 'error');
-                closeModal('product-modal');
-                navigate('topup');
-                return;
-            }
-            const confirmBtn = event.target;
-            confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังดำเนินการ...';
+            if(currentUser.balance < price) { showAlert('ยอดเงินไม่พอ', 'กรุณาเติมเงินก่อนสั่งซื้อสินค้า', 'error'); closeModal('product-modal'); navigate('topup'); return; }
+            const confirmBtn = event.target; confirmBtn.disabled = true; confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังดำเนินการ...';
 
             const res = await gasAPI('buyProduct', { userId: currentUser.userId, productId: id, productName: name, price: price });
-            
             if(res.success) {
-                currentUser.balance = res.data.newBalance;
-                localStorage.setItem('userSession', JSON.stringify(currentUser));
-                updateUIState();
-                closeModal('product-modal');
-                showAlert('สั่งซื้อสำเร็จ!', `คุณได้สั่งซื้อ ${name} เรียบร้อยแล้ว กรุณาตรวจสอบในกล่องข้อความ`, 'success');
-            } else {
-                showAlert('เกิดข้อผิดพลาด', res.error, 'error');
-                resetBtn(confirmBtn, 'สั่งซื้อสินค้า <i class="fas fa-check ml-1"></i>');
-            }
+                currentUser.balance = res.data.newBalance; localStorage.setItem('userSession', JSON.stringify(currentUser)); updateUIState();
+                closeModal('product-modal'); showAlert('สั่งซื้อสำเร็จ!', `คุณได้สั่งซื้อ ${name} เรียบร้อยแล้ว กรุณาตรวจสอบในกล่องข้อความ`, 'success');
+            } else { showAlert('เกิดข้อผิดพลาด', res.error, 'error'); resetBtn(confirmBtn, 'สั่งซื้อสินค้า <i class="fas fa-check ml-1"></i>'); }
         }
 
         // ====== Topup ======
         async function handleTopup(event) {
             event.preventDefault();
-            const btn = document.getElementById('btn-topup-submit');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังอัปโหลดสลิป...';
-
+            const btn = document.getElementById('btn-topup-submit'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังอัปโหลดสลิป...';
             const fileInput = document.getElementById('topup-slip');
             if (!fileInput.files[0]) return;
 
             const reader = new FileReader();
             reader.onload = async function() {
-                const payload = {
-                    userId: currentUser.userId,
-                    amount: document.getElementById('topup-amount').value,
-                    slip6: document.getElementById('topup-ref').value.toUpperCase(),
-                    imageBase64: reader.result,
-                    mimeType: fileInput.files[0].type
-                };
-
+                const payload = { userId: currentUser.userId, amount: document.getElementById('topup-amount').value, slip6: document.getElementById('topup-ref').value.toUpperCase(), imageBase64: reader.result, mimeType: fileInput.files[0].type };
                 const res = await gasAPI('topup', payload);
                 if(res.success) {
-                    currentUser.balance = res.data.newBalance;
-                    localStorage.setItem('userSession', JSON.stringify(currentUser));
-                    updateUIState();
-                    showAlert('สำเร็จ', 'ส่งข้อมูลสำเร็จ กรุณารอระบบตรวจสอบยอดเงิน', 'success');
-                    event.target.reset();
-                } else {
-                    showAlert('ผิดพลาด', res.error, 'error');
-                }
+                    currentUser.balance = res.data.newBalance; localStorage.setItem('userSession', JSON.stringify(currentUser)); updateUIState();
+                    showAlert('สำเร็จ', 'ส่งข้อมูลสำเร็จ กรุณารอระบบตรวจสอบยอดเงิน', 'success'); event.target.reset();
+                } else { showAlert('ผิดพลาด', res.error, 'error'); }
                 resetBtn(btn, 'ยืนยันการเติมเงิน <i class="fas fa-paper-plane ml-1"></i>');
             };
             reader.readAsDataURL(fileInput.files[0]);
@@ -549,9 +457,7 @@
         function switchAdminTab(tabName) {
             document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
-            ['products', 'users', 'settings'].forEach(t => {
-                document.getElementById(`tab-btn-${t}`).className = "px-6 py-2 rounded-xl font-bold transition bg-white text-pink-600 border border-pink-200 hover:bg-pink-50";
-            });
+            ['products', 'users', 'settings'].forEach(t => { document.getElementById(`tab-btn-${t}`).className = "px-6 py-2 rounded-xl font-bold transition bg-white text-pink-600 border border-pink-200 hover:bg-pink-50"; });
             document.getElementById(`tab-btn-${tabName}`).className = "px-6 py-2 rounded-xl font-bold transition btn-pink shadow-md";
         }
 
@@ -559,56 +465,28 @@
             document.getElementById('admin-product-list').innerHTML = '<tr><td colspan="4" class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</td></tr>';
             const res = await gasAPI('adminGetData', { adminId: currentUser.userId });
             if(res.success) {
-                // Render Products
-                const tbodyP = document.getElementById('admin-product-list');
-                tbodyP.innerHTML = '';
-                res.data.products.forEach(p => {
-                    tbodyP.innerHTML += `
-                        <tr class="hover:bg-pink-50 transition">
-                            <td class="p-4 font-medium text-gray-700">${p.Name}</td>
-                            <td class="p-4"><span class="bg-pink-100 text-pink-600 px-2 py-1 rounded-md text-xs font-bold uppercase">${p.Category}</span></td>
-                            <td class="p-4 text-pink-600 font-bold">฿${p.RegPrice}</td>
-                            <td class="p-4 text-center">
-                                <button onclick="adminDeleteProduct('${p.ProductID}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>`;
-                });
+                const tbodyP = document.getElementById('admin-product-list'); tbodyP.innerHTML = '';
+                res.data.products.forEach(p => { tbodyP.innerHTML += `<tr class="hover:bg-pink-50 transition"><td class="p-4 font-medium text-gray-700">${p.Name}</td><td class="p-4"><span class="bg-pink-100 text-pink-600 px-2 py-1 rounded-md text-xs font-bold uppercase">${p.Category}</span></td><td class="p-4 text-pink-600 font-bold">฿${p.RegPrice}</td><td class="p-4 text-center"><button onclick="adminDeleteProduct('${p.ProductID}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"><i class="fas fa-trash-alt"></i></button></td></tr>`; });
 
-                // Render Users
-                const tbodyU = document.getElementById('admin-user-list');
-                tbodyU.innerHTML = '';
-                res.data.users.forEach((u, index) => {
-                    tbodyU.innerHTML += `
-                        <tr class="hover:bg-pink-50 transition">
-                            <td class="p-4 font-medium text-gray-700"><i class="fas fa-user text-pink-300 mr-2"></i>${u.UserID}</td>
-                            <td class="p-4 text-center">
-                                <input type="number" id="u-bal-${index}" value="${u.Balance}" class="w-24 px-2 py-1 border border-pink-200 rounded-lg text-center outline-none focus:ring-2 focus:ring-pink-400">
-                            </td>
-                            <td class="p-4 text-center">
-                                <select id="u-role-${index}" class="px-2 py-1 border border-pink-200 rounded-lg outline-none focus:ring-2 focus:ring-pink-400 bg-white">
-                                    <option value="user" ${u.Role === 'user' ? 'selected' : ''}>User</option>
-                                    <option value="admin" ${u.Role === 'admin' ? 'selected' : ''}>Admin</option>
-                                </select>
-                            </td>
-                            <td class="p-4 text-center">
-                                <button onclick="adminSaveUser('${u.UserID}', ${index})" class="text-white bg-green-400 hover:bg-green-500 px-4 py-1.5 rounded-lg transition font-bold shadow-sm"><i class="fas fa-save"></i> บันทึก</button>
-                            </td>
-                        </tr>`;
-                });
+                const tbodyU = document.getElementById('admin-user-list'); tbodyU.innerHTML = '';
+                res.data.users.forEach((u, index) => { tbodyU.innerHTML += `<tr class="hover:bg-pink-50 transition"><td class="p-4 font-medium text-gray-700"><i class="fas fa-user text-pink-300 mr-2"></i>${u.UserID}</td><td class="p-4 text-center"><input type="number" id="u-bal-${index}" value="${u.Balance}" class="w-24 px-2 py-1 border border-pink-200 rounded-lg text-center outline-none focus:ring-2 focus:ring-pink-400"></td><td class="p-4 text-center"><select id="u-role-${index}" class="px-2 py-1 border border-pink-200 rounded-lg outline-none focus:ring-2 focus:ring-pink-400 bg-white"><option value="user" ${u.Role === 'user' ? 'selected' : ''}>User</option><option value="admin" ${u.Role === 'admin' ? 'selected' : ''}>Admin</option></select></td><td class="p-4 text-center"><button onclick="adminSaveUser('${u.UserID}', ${index})" class="text-white bg-green-400 hover:bg-green-500 px-4 py-1.5 rounded-lg transition font-bold shadow-sm"><i class="fas fa-save"></i> บันทึก</button></td></tr>`; });
 
-                // Set Settings
+                document.getElementById('set-store').value = res.data.settings['StoreName'] || '';
+                document.getElementById('set-logo').value = res.data.settings['Logo_URL'] || '';
                 document.getElementById('set-banner').value = res.data.settings['Banner_URL'] || '';
+                document.getElementById('set-banner-link').value = res.data.settings['Banner_Link'] || '';
                 document.getElementById('set-qr').value = res.data.settings['QR_Image_URL'] || '';
                 document.getElementById('set-email').value = res.data.settings['AdminEmail'] || '';
-            } else {
-                showAlert('ข้อผิดพลาด', res.error, 'error');
-            }
+            } else { showAlert('ข้อผิดพลาด', res.error, 'error'); }
         }
 
         async function adminSaveSetting(key, inputId) {
             const val = document.getElementById(inputId).value;
             const res = await gasAPI('adminUpdateSetting', { adminId: currentUser.userId, key: key, value: val });
-            if(res.success) showAlert('สำเร็จ', 'อัปเดตการตั้งค่าเรียบร้อยแล้ว หากอัปเดตรูปให้รีเฟรชหน้าเว็บเพื่อดูผลลัพธ์', 'success');
+            if(res.success) {
+                showAlert('สำเร็จ', 'อัปเดตเรียบร้อยแล้ว หากเปลี่ยนชื่อ/รูป กรุณารีเฟรชหน้าเว็บเพื่อดูผลลัพธ์', 'success');
+                loadInitialData(); // Refresh UI info
+            }
             else showAlert('ผิดพลาด', res.error, 'error');
         }
 
@@ -622,32 +500,19 @@
 
         async function adminSubmitProduct(event) {
             event.preventDefault();
-            const btn = document.getElementById('btn-admin-add');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
-            
-            const payload = {
-                adminId: currentUser.userId,
-                name: document.getElementById('ap-name').value, category: document.getElementById('ap-category').value,
-                price: document.getElementById('ap-price').value, status: document.getElementById('ap-status').value,
-                image: document.getElementById('ap-image').value, details: document.getElementById('ap-details').value,
-                info: document.getElementById('ap-info').value
-            };
+            const btn = document.getElementById('btn-admin-add'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+            const payload = { adminId: currentUser.userId, name: document.getElementById('ap-name').value, category: document.getElementById('ap-category').value, price: document.getElementById('ap-price').value, status: document.getElementById('ap-status').value, image: document.getElementById('ap-image').value, details: document.getElementById('ap-details').value, info: document.getElementById('ap-info').value };
             const res = await gasAPI('adminAddProduct', payload);
-            if(res.success) {
-                showAlert('สำเร็จ', 'เพิ่มสินค้าใหม่เรียบร้อยแล้ว', 'success');
-                event.target.reset();
-                loadAdminData(); loadInitialData(); 
-            } else showAlert('ผิดพลาด', res.error, 'error');
+            if(res.success) { showAlert('สำเร็จ', 'เพิ่มสินค้าใหม่เรียบร้อยแล้ว', 'success'); event.target.reset(); loadAdminData(); loadInitialData(); } 
+            else showAlert('ผิดพลาด', res.error, 'error');
             btn.innerHTML = '<i class="fas fa-save mr-1"></i> บันทึกสินค้า';
         }
 
         async function adminDeleteProduct(productId) {
             if(confirm('คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้?')) {
                 const res = await gasAPI('adminDeleteProduct', { adminId: currentUser.userId, productId: productId });
-                if(res.success) {
-                    showAlert('สำเร็จ', 'ลบสินค้าเรียบร้อยแล้ว', 'success');
-                    loadAdminData(); loadInitialData();
-                } else showAlert('ผิดพลาด', res.error, 'error');
+                if(res.success) { showAlert('สำเร็จ', 'ลบสินค้าเรียบร้อยแล้ว', 'success'); loadAdminData(); loadInitialData(); } 
+                else showAlert('ผิดพลาด', res.error, 'error');
             }
         }
     </script>
