@@ -260,7 +260,6 @@
     </div>
 
     <script>
-        // *** อัปเดตลิงก์ API ตัวใหม่ของคุณให้แล้วครับ ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzw9hqCs-Lx8xBXDAWW3QEnpKdaD3wy65QeLwB5F_BYllGYc93q3H-zpfMwCMlPZ-UJ4w/exec'; 
 
         let currentUser = JSON.parse(localStorage.getItem('userSession')) || null;
@@ -286,7 +285,7 @@
                 return await response.json();
             } catch (error) {
                 console.error("API Error:", error);
-                return { success: false, error: "การเชื่อมต่อเซิร์ฟเวอร์ขัดข้อง กรุณาตรวจสอบลิงก์ SCRIPT_URL" };
+                return { success: false, error: "การเชื่อมต่อเซิร์ฟเวอร์ขัดข้อง กรุณาตรวจสอบลิงก์ SCRIPT_URL หรืออินเทอร์เน็ตของคุณ" };
             }
         }
 
@@ -298,18 +297,11 @@
 
         function navigateMenu(target) {
             if (!currentUser && target !== 'home') { showAlert('กรุณาเข้าสู่ระบบ', 'คุณต้องเข้าสู่ระบบก่อนจึงจะเข้าใช้งานส่วนนี้ได้', 'warning'); return; }
-            
-            toggleMenu(); // ปิดเมนูมือถือเวลาคลิก
-            
-            if (target === 'home') { 
-                navigate('home'); window.scrollTo({top: 0, behavior: 'smooth'});
-            } else if (target === 'manual') {
-                navigate('home'); document.getElementById('section-manual').scrollIntoView({behavior: 'smooth'});
-            } else if (target === 'api') {
-                navigate('home'); document.getElementById('section-api').scrollIntoView({behavior: 'smooth'});
-            } else if (['inbox', 'topup', 'admin'].includes(target)) { 
-                navigate(target); if(target === 'admin') loadAdminData(); 
-            } 
+            toggleMenu(); 
+            if (target === 'home') { navigate('home'); window.scrollTo({top: 0, behavior: 'smooth'}); } 
+            else if (target === 'manual') { navigate('home'); document.getElementById('section-manual').scrollIntoView({behavior: 'smooth'}); } 
+            else if (target === 'api') { navigate('home'); document.getElementById('section-api').scrollIntoView({behavior: 'smooth'}); } 
+            else if (['inbox', 'topup', 'admin'].includes(target)) { navigate(target); if(target === 'admin') loadAdminData(); } 
         }
 
         function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
@@ -317,7 +309,7 @@
 
         function showAlert(title, desc, type = 'info') {
             document.getElementById('alert-title').innerText = title;
-            document.getElementById('alert-desc').innerText = desc;
+            document.getElementById('alert-desc').innerHTML = desc;
             const icon = document.getElementById('alert-icon');
             if(type === 'error') icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
             else if(type === 'success') icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
@@ -378,7 +370,7 @@
             const res = await gasAPI('getInitData');
             if(res.success) {
                 productsData = res.data.products;
-                renderProducts(productsData); // เรียกฟังก์ชันจัดเรียงสินค้าใหม่
+                renderProducts(productsData); 
                 
                 const storeName = res.data.settings['StoreName'] || 'SweetStore';
                 document.querySelectorAll('.display-store-name').forEach(el => el.innerText = storeName);
@@ -402,21 +394,16 @@
             }
         }
 
-        // ====== ฟังก์ชันจัดการหมวดหมู่สินค้า ======
         function renderProducts(products) {
             const gridManual = document.getElementById('product-grid-manual'); 
             const gridApi = document.getElementById('product-grid-api'); 
             gridManual.innerHTML = '';
             gridApi.innerHTML = '';
 
-            let countManual = 0;
-            let countApi = 0;
+            let countManual = 0; let countApi = 0;
 
             products.forEach(p => {
-                // เช็คว่าเป็นสินค้าทำมือ (รหัสจะขึ้นต้นด้วย PRD) ถ้าไม่ใช่แสดงว่าเป็น API
                 const isManual = String(p.ProductID).startsWith('PRD');
-                
-                // ถ้ารูปไม่มี ให้โชว์รูปเปล่าๆ
                 const imgSrc = p.Image ? p.Image : 'https://via.placeholder.com/300x200/fce7f3/db2777?text=No+Image';
 
                 const cardHTML = `
@@ -435,17 +422,12 @@
                         </div>
                     </div>`;
 
-                if(isManual) {
-                    gridManual.innerHTML += cardHTML;
-                    countManual++;
-                } else {
-                    gridApi.innerHTML += cardHTML;
-                    countApi++;
-                }
+                if(isManual) { gridManual.innerHTML += cardHTML; countManual++; } 
+                else { gridApi.innerHTML += cardHTML; countApi++; }
             });
 
-            if(countManual === 0) gridManual.innerHTML = '<div class="col-span-full text-center text-pink-400 py-6 bg-white rounded-2xl border border-pink-100">ยังไม่มีสินค้าในหมวดหมู่นี้</div>';
-            if(countApi === 0) gridApi.innerHTML = '<div class="col-span-full text-center text-pink-400 py-6 bg-white rounded-2xl border border-pink-100">ยังไม่มีบริการ API ในขณะนี้</div>';
+            if(countManual === 0) gridManual.innerHTML = '<div class="col-span-full text-center text-pink-400 py-6 bg-white rounded-2xl border border-pink-100 font-medium">ยังไม่มีสินค้าในหมวดหมู่นี้</div>';
+            if(countApi === 0) gridApi.innerHTML = '<div class="col-span-full text-center text-pink-400 py-6 bg-white rounded-2xl border border-pink-100 font-medium">ยังไม่มีบริการ API ในขณะนี้</div>';
         }
 
         function openProduct(id) {
@@ -571,6 +553,9 @@
             }
         }
 
+        // ==========================================
+        // ฟังก์ชันดึง API ที่เพิ่มการดักจับข้อผิดพลาด
+        // ==========================================
         async function openApiSyncModal() {
             document.getElementById('api-sync-modal').classList.remove('hidden');
             const tbody = document.getElementById('api-product-list');
@@ -578,22 +563,27 @@
             
             const res = await gasAPI('adminFetchAPI', { adminId: currentUser.userId });
             
-            if(res.success && res.apiProducts) {
+            if(res.success === true) {
                 tbody.innerHTML = '';
-                res.apiProducts.forEach(p => {
-                    const cost = p.cost || p.price || 0;
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-pink-50 transition">
-                            <td class="p-3 font-medium text-gray-700">${p.name} <br><span class="text-[10px] text-gray-400">ID: ${p.id}</span></td>
-                            <td class="p-3 text-center text-pink-600 font-bold">฿${cost}</td>
-                            <td class="p-3 text-center">
-                                <button onclick="importApiProduct('${p.id}', '${p.name}', ${cost})" class="bg-pink-100 text-pink-600 hover:bg-pink-200 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow-sm"><i class="fas fa-download"></i> นำเข้าร้าน</button>
-                            </td>
-                        </tr>
-                    `;
-                });
+                if(res.apiProducts && res.apiProducts.length > 0) {
+                    res.apiProducts.forEach(p => {
+                        const cost = p.cost || p.price || 0;
+                        tbody.innerHTML += `
+                            <tr class="hover:bg-pink-50 transition">
+                                <td class="p-3 font-medium text-gray-700">${p.name} <br><span class="text-[10px] text-gray-400">ID: ${p.id}</span></td>
+                                <td class="p-3 text-center text-pink-600 font-bold">฿${cost}</td>
+                                <td class="p-3 text-center">
+                                    <button onclick="importApiProduct('${p.id}', '${p.name}', ${cost})" class="bg-pink-100 text-pink-600 hover:bg-pink-200 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow-sm"><i class="fas fa-download"></i> นำเข้าร้าน</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500 font-medium">ไม่มีรายการสินค้าจาก API</td></tr>`;
+                }
             } else {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500">เชื่อมต่อล้มเหลว กรุณาตรวจสอบ API_URL ในระบบหลังบ้าน (Code.gs)</td></tr>`;
+                const errorMsg = res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล";
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500 font-bold">เชื่อมต่อ API ล้มเหลว สาเหตุ: <br><span class="text-sm font-normal text-gray-600">${errorMsg}</span><br><br><span class="text-xs text-pink-400">โปรดตรวจสอบว่าคุณอัปเดต New Deployment ในหลังบ้านแล้วหรือยัง</span></td></tr>`;
             }
         }
 
@@ -602,7 +592,7 @@
             document.getElementById('ap-id').value = id;
             document.getElementById('ap-name').value = name;
             document.getElementById('ap-price').value = cost; 
-            document.getElementById('ap-category').value = 'otp';
+            document.getElementById('ap-category').value = 'api';
             document.getElementById('ap-details').value = 'ดึงมาจากระบบ API';
             document.getElementById('ap-info').value = 'ส่งคำสั่งซื้ออัตโนมัติ';
             
@@ -612,7 +602,7 @@
             priceInput.classList.add('ring-2', 'ring-yellow-400');
             setTimeout(() => priceInput.classList.remove('ring-2', 'ring-yellow-400'), 2000);
             
-            showAlert('นำเข้าสำเร็จ', 'ข้อมูลถูกคัดลอกลงฟอร์มแล้ว กรุณา "ตั้งราคาขาย" และกำหนดรูปภาพก่อนกดบันทึกเข้าร้าน', 'info');
+            showAlert('นำเข้าสำเร็จ', 'ข้อมูลถูกคัดลอกลงฟอร์มแล้ว กรุณา "ตั้งราคาขาย" (บวกกำไร) ก่อนกดบันทึกเข้าร้าน', 'info');
         }
     </script>
 </body>
