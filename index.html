@@ -260,6 +260,7 @@
     </div>
 
     <script>
+        // *** อย่าลืมตรวจสอบว่าลิงก์ Web App ตรงนี้ตรงกับเวอร์ชันล่าสุดหรือไม่ ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzw9hqCs-Lx8xBXDAWW3QEnpKdaD3wy65QeLwB5F_BYllGYc93q3H-zpfMwCMlPZ-UJ4w/exec'; 
 
         let currentUser = JSON.parse(localStorage.getItem('userSession')) || null;
@@ -554,7 +555,7 @@
         }
 
         // ==========================================
-        // ฟังก์ชันดึง API ที่เพิ่มการดักจับข้อผิดพลาด
+        // ฟังก์ชันดึง API ที่แก้ไขการอ่านข้อมูล (Data Mapping) แล้ว
         // ==========================================
         async function openApiSyncModal() {
             document.getElementById('api-sync-modal').classList.remove('hidden');
@@ -565,25 +566,33 @@
             
             if(res.success === true) {
                 tbody.innerHTML = '';
-                if(res.apiProducts && res.apiProducts.length > 0) {
-                    res.apiProducts.forEach(p => {
-                        const cost = p.cost || p.price || 0;
+                
+                // ดึงข้อมูลผ่าน res.data.apiProducts
+                const products = res.data.apiProducts; 
+                
+                if(products && products.length > 0) {
+                    products.forEach(p => {
+                        // จับคู่ตัวแปรใหม่ให้ตรงกับที่ otp24hr ส่งมา (รองรับทั้ง OTP และแพ็กเกจ)
+                        const id = p.type_code || p.type || p.id || 'ไม่มีรหัส';
+                        const name = p.name || p.app || p.namegame || 'ไม่มีชื่อสินค้า';
+                        const cost = p.price || p.price_ori || p.cost || 0;
+                        
                         tbody.innerHTML += `
                             <tr class="hover:bg-pink-50 transition">
-                                <td class="p-3 font-medium text-gray-700">${p.name} <br><span class="text-[10px] text-gray-400">ID: ${p.id}</span></td>
+                                <td class="p-3 font-medium text-gray-700">${name} <br><span class="text-[10px] text-gray-400">Code: ${id}</span></td>
                                 <td class="p-3 text-center text-pink-600 font-bold">฿${cost}</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="importApiProduct('${p.id}', '${p.name}', ${cost})" class="bg-pink-100 text-pink-600 hover:bg-pink-200 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow-sm"><i class="fas fa-download"></i> นำเข้าร้าน</button>
+                                    <button onclick="importApiProduct('${id}', '${name}', ${cost})" class="bg-pink-100 text-pink-600 hover:bg-pink-200 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow-sm"><i class="fas fa-download"></i> นำเข้าร้าน</button>
                                 </td>
                             </tr>
                         `;
                     });
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500 font-medium">ไม่มีรายการสินค้าจาก API</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500 font-medium">ไม่มีรายการสินค้าจาก API (หรือรูปแบบข้อมูลไม่รองรับ)</td></tr>`;
                 }
             } else {
                 const errorMsg = res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล";
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500 font-bold">เชื่อมต่อ API ล้มเหลว สาเหตุ: <br><span class="text-sm font-normal text-gray-600">${errorMsg}</span><br><br><span class="text-xs text-pink-400">โปรดตรวจสอบว่าคุณอัปเดต New Deployment ในหลังบ้านแล้วหรือยัง</span></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500 font-bold">เชื่อมต่อ API ล้มเหลว สาเหตุ: <br><span class="text-sm font-normal text-gray-600">${errorMsg}</span></td></tr>`;
             }
         }
 
@@ -592,7 +601,10 @@
             document.getElementById('ap-id').value = id;
             document.getElementById('ap-name').value = name;
             document.getElementById('ap-price').value = cost; 
-            document.getElementById('ap-category').value = 'api';
+            
+            // ตั้งค่าเริ่มต้นเป็นหมวดหมู่ OTP
+            document.getElementById('ap-category').value = 'otp';
+            
             document.getElementById('ap-details').value = 'ดึงมาจากระบบ API';
             document.getElementById('ap-info').value = 'ส่งคำสั่งซื้ออัตโนมัติ';
             
