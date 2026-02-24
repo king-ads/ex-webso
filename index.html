@@ -63,8 +63,8 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         
         <div id="page-home" class="page-section animate-fade-in">
-            <a id="site-banner-link" target="_blank" class="block w-full h-48 sm:h-72 bg-pink-200 rounded-3xl overflow-hidden shadow-sm mb-8 relative border-4 border-white transition hover:opacity-95">
-                <img id="site-banner" src="" class="w-full h-full object-cover" alt="Banner">
+            <a id="site-banner-link" target="_blank" class="block w-full min-h-[12rem] bg-pink-50 rounded-3xl overflow-hidden shadow-sm mb-8 relative border-4 border-white transition hover:opacity-95 flex items-center justify-center">
+                <img id="site-banner" src="" class="w-full max-h-[400px] object-contain mx-auto" alt="Banner">
                 <div id="banner-loader" class="absolute inset-0 flex items-center justify-center bg-pink-100 text-pink-400"><i class="fas fa-spinner fa-spin text-3xl"></i></div>
             </a>
             
@@ -208,6 +208,20 @@
                         <label class="text-sm font-bold mb-2 block text-pink-700">Admin Email (อีเมลรับแจ้งเตือน)</label>
                         <div class="flex gap-2"><input type="text" id="set-email" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('AdminEmail', 'set-email')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
                     </div>
+                    
+                    <h4 class="font-bold text-md mt-6 pt-4 border-t border-pink-200 text-pink-600"><i class="fas fa-bullhorn mr-2"></i>ตั้งค่า Pop-up (แสดงตอน Login สำเร็จ)</h4>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                        <label class="text-sm font-bold mb-2 block text-pink-700">รูปภาพ Pop-up (ลิงก์รูปภาพเต็มใบ / ว่างไว้ถ้าไม่มี)</label>
+                        <div class="flex gap-2"><input type="text" id="set-welcome-img" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('Welcome_Image_URL', 'set-welcome-img')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                        <label class="text-sm font-bold mb-2 block text-pink-700">หัวข้อ Pop-up (Welcome Title)</label>
+                        <div class="flex gap-2"><input type="text" id="set-welcome-title" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('Welcome_Title', 'set-welcome-title')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                        <label class="text-sm font-bold mb-2 block text-pink-700">ข้อความ Pop-up (Welcome Message)</label>
+                        <div class="flex gap-2"><input type="text" id="set-welcome-msg" class="flex-grow px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-pink-400"><button onclick="adminSaveSetting('Welcome_Message', 'set-welcome-msg')" class="btn-pink px-4 py-2 rounded-xl font-bold shadow"><i class="fas fa-save"></i></button></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,12 +232,18 @@
         <p><i class="fas fa-heart text-pink-500"></i> Copyright &copy; 2026 <span class="display-store-name">SweetStore</span>. All rights reserved.</p>
     </footer>
 
-    <div id="welcome-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-pink-900/40 backdrop-blur-sm px-4">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl transform scale-95 transition-all animate-fade-in text-center relative border-2 border-pink-100">
-            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-gradient-to-br from-pink-300 to-pink-500 rounded-full border-4 border-white flex items-center justify-center text-4xl text-white shadow-lg"><i class="fas fa-gift"></i></div>
-            <h3 class="text-2xl font-bold mt-12 mb-3 text-gray-800">ยินดีต้อนรับสู่ <span class="display-store-name">SweetStore</span></h3>
-            <p class="text-pink-500 text-sm mb-8 leading-relaxed">ศูนย์รวมแอพพรีเมียมและเติมเกมอัตโนมัติ 24 ชม.<br>สะดวก รวดเร็ว ปลอดภัย</p>
-            <button onclick="closeModal('welcome-modal')" class="btn-pink px-6 py-3 rounded-full font-bold w-full shadow-md text-lg">เข้าสู่เว็บไซต์</button>
+    <div id="welcome-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-pink-900/60 backdrop-blur-sm px-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl transform transition-all animate-fade-in text-center relative border-2 border-pink-100 my-8">
+            <button onclick="closeModal('welcome-modal')" class="absolute top-4 right-4 text-pink-300 hover:text-pink-600 text-2xl bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-sm z-10"><i class="fas fa-times"></i></button>
+            <div id="welcome-image-container" class="w-full mb-4 hidden relative">
+                <img id="welcome-image" src="" class="w-full max-h-56 object-contain rounded-xl mx-auto" alt="Welcome">
+            </div>
+            <div id="welcome-icon-container" class="w-20 h-20 bg-gradient-to-br from-pink-300 to-pink-500 rounded-full border-4 border-white flex items-center justify-center text-3xl text-white shadow-lg mx-auto mb-4 mt-2">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h3 id="welcome-title" class="text-2xl font-bold mb-3 text-gray-800">ยินดีต้อนรับ</h3>
+            <p id="welcome-message" class="text-pink-500 text-sm mb-6 leading-relaxed"></p>
+            <button onclick="closeModal('welcome-modal')" class="btn-pink px-6 py-3 rounded-full font-bold w-full shadow-md text-lg">เข้าสู่ระบบสำเร็จ <i class="fas fa-arrow-right ml-1"></i></button>
         </div>
     </div>
 
@@ -260,18 +280,14 @@
     </div>
 
     <script>
-        // *** เช็ค URL ตัวนี้ให้ตรงกับ Web App ที่ Deploy ออกมาใหม่ด้วยนะครับ ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzw9hqCs-Lx8xBXDAWW3QEnpKdaD3wy65QeLwB5F_BYllGYc93q3H-zpfMwCMlPZ-UJ4w/exec'; 
 
         let currentUser = JSON.parse(localStorage.getItem('userSession')) || null;
         let productsData = [];
+        let globalSettings = {}; // ตัวแปรเก็บการตั้งค่าแบบ Global
 
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
-            if (!sessionStorage.getItem('welcomed')) {
-                setTimeout(() => document.getElementById('welcome-modal').classList.remove('hidden'), 500);
-                sessionStorage.setItem('welcomed', 'true');
-            }
         });
 
         async function initApp() {
@@ -358,7 +374,13 @@
             if (res.success) {
                 currentUser = res.data; localStorage.setItem('userSession', JSON.stringify(currentUser));
                 updateUIState(); navigate('home');
-                showAlert('สำเร็จ', type === 'login' ? 'เข้าสู่ระบบสำเร็จ' : 'สมัครสมาชิกสำเร็จ!', 'success');
+                
+                if(type === 'login') {
+                    // โชว์ Pop-up แทนการใช้ showAlert ธรรมดา
+                    document.getElementById('welcome-modal').classList.remove('hidden');
+                } else {
+                    showAlert('สำเร็จ', 'สมัครสมาชิกสำเร็จ!', 'success');
+                }
                 event.target.reset();
             } else { showAlert('ล้มเหลว', res.error, 'error'); }
             resetBtn(btn, type === 'login' ? 'เข้าสู่ระบบ <i class="fas fa-arrow-right ml-1"></i>' : 'สมัครสมาชิก <i class="fas fa-check-circle ml-1"></i>');
@@ -371,25 +393,39 @@
             const res = await gasAPI('getInitData');
             if(res.success) {
                 productsData = res.data.products;
+                globalSettings = res.data.settings; // เก็บการตั้งค่า
                 renderProducts(productsData); 
                 
-                const storeName = res.data.settings['StoreName'] || 'SweetStore';
+                const storeName = globalSettings['StoreName'] || 'SweetStore';
                 document.querySelectorAll('.display-store-name').forEach(el => el.innerText = storeName);
                 
-                const logoUrl = res.data.settings['Logo_URL'];
+                const logoUrl = globalSettings['Logo_URL'];
                 if(logoUrl) {
                     document.getElementById('display-logo-img').src = logoUrl;
                     document.getElementById('display-logo-img').classList.remove('hidden');
                     document.getElementById('display-logo-icon').classList.add('hidden');
                 }
 
-                document.getElementById('site-banner').src = res.data.settings['Banner_URL'] || '';
-                document.getElementById('qr-image').src = res.data.settings['QR_Image_URL'] || '';
+                document.getElementById('site-banner').src = globalSettings['Banner_URL'] || '';
+                document.getElementById('qr-image').src = globalSettings['QR_Image_URL'] || '';
                 
-                const bannerLink = res.data.settings['Banner_Link'];
+                const bannerLink = globalSettings['Banner_Link'];
                 const bannerElement = document.getElementById('site-banner-link');
                 if (bannerLink) { bannerElement.href = bannerLink; bannerElement.classList.remove('cursor-default'); } 
                 else { bannerElement.removeAttribute('href'); bannerElement.classList.add('cursor-default'); }
+                
+                // อัปเดตข้อมูล Pop-up Welcome
+                const welcomeImgUrl = globalSettings['Welcome_Image_URL'];
+                if(welcomeImgUrl) {
+                    document.getElementById('welcome-image').src = welcomeImgUrl;
+                    document.getElementById('welcome-image-container').classList.remove('hidden');
+                    document.getElementById('welcome-icon-container').classList.add('hidden'); // ซ่อนไอคอนกล่องของขวัญเมื่อมีรูป
+                } else {
+                    document.getElementById('welcome-image-container').classList.add('hidden');
+                    document.getElementById('welcome-icon-container').classList.remove('hidden');
+                }
+                document.getElementById('welcome-title').innerHTML = globalSettings['Welcome_Title'] || 'ยินดีต้อนรับ';
+                document.getElementById('welcome-message').innerHTML = globalSettings['Welcome_Message'] || '';
 
                 document.getElementById('banner-loader').classList.add('hidden');
             }
@@ -409,9 +445,9 @@
 
                 const cardHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden hover:shadow-lg transition-all flex flex-col group cursor-pointer" onclick="openProduct('${p.ProductID}')">
-                        <div class="relative h-32 sm:h-40 overflow-hidden bg-pink-50">
-                            <img src="${imgSrc}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" onerror="this.src='https://via.placeholder.com/300x200/fce7f3/db2777?text=No+Image'">
-                            <div class="absolute top-2 right-2 ${isManual ? 'bg-green-500' : 'bg-blue-500'} text-white text-[10px] px-2 py-1 rounded-full shadow font-bold">
+                        <div class="relative h-32 sm:h-40 overflow-hidden bg-pink-50 flex items-center justify-center p-2">
+                            <img src="${imgSrc}" class="w-full h-full object-contain group-hover:scale-105 transition duration-300 rounded-md" onerror="this.src='https://via.placeholder.com/300x200/fce7f3/db2777?text=No+Image'">
+                            <div class="absolute top-2 right-2 ${isManual ? 'bg-green-500' : 'bg-blue-500'} text-white text-[10px] px-2 py-1 rounded-full shadow font-bold z-10">
                                 <i class="fas fa-circle text-[6px]"></i> ${isManual ? 'พร้อมส่ง' : 'ระบบออโต้'}
                             </div>
                         </div>
@@ -440,7 +476,9 @@
             const imgSrc = p.Image ? p.Image : 'https://via.placeholder.com/300x200/fce7f3/db2777?text=No+Image';
 
             document.getElementById('modal-product-content').innerHTML = `
-                <img src="${imgSrc}" class="w-full h-48 object-cover rounded-xl mb-4 border border-pink-100" onerror="this.src='https://via.placeholder.com/300x200/fce7f3/db2777?text=No+Image'">
+                <div class="bg-pink-50 rounded-xl mb-4 border border-pink-100 p-2 flex items-center justify-center">
+                    <img src="${imgSrc}" class="w-full max-h-56 object-contain rounded-lg" onerror="this.src='https://via.placeholder.com/300x200/fce7f3/db2777?text=No+Image'">
+                </div>
                 <span class="${isManual ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'} text-xs px-2 py-1 rounded-md font-bold uppercase">${p.Category}</span>
                 <h2 class="text-2xl font-bold mt-2 text-gray-800">${p.Name}</h2>
                 <div class="text-3xl font-bold text-pink-500 my-3">฿${p.SalePrice}</div>
@@ -505,12 +543,16 @@
                 const tbodyU = document.getElementById('admin-user-list'); tbodyU.innerHTML = '';
                 res.data.users.forEach((u, index) => { tbodyU.innerHTML += `<tr class="hover:bg-pink-50 transition"><td class="p-4 font-medium text-gray-700"><i class="fas fa-user text-pink-300 mr-2"></i>${u.UserID}</td><td class="p-4 text-center"><input type="number" id="u-bal-${index}" value="${u.Balance}" class="w-24 px-2 py-1 border border-pink-200 rounded-lg text-center outline-none focus:ring-2 focus:ring-pink-400"></td><td class="p-4 text-center"><select id="u-role-${index}" class="px-2 py-1 border border-pink-200 rounded-lg outline-none focus:ring-2 focus:ring-pink-400 bg-white"><option value="user" ${u.Role === 'user' ? 'selected' : ''}>User</option><option value="admin" ${u.Role === 'admin' ? 'selected' : ''}>Admin</option></select></td><td class="p-4 text-center"><button onclick="adminSaveUser('${u.UserID}', ${index})" class="text-white bg-green-400 hover:bg-green-500 px-4 py-1.5 rounded-lg transition font-bold shadow-sm"><i class="fas fa-save"></i> บันทึก</button></td></tr>`; });
 
+                // โหลดตั้งค่าเดิมมาแสดงในช่องกรอก
                 document.getElementById('set-store').value = res.data.settings['StoreName'] || '';
                 document.getElementById('set-logo').value = res.data.settings['Logo_URL'] || '';
                 document.getElementById('set-banner').value = res.data.settings['Banner_URL'] || '';
                 document.getElementById('set-banner-link').value = res.data.settings['Banner_Link'] || '';
                 document.getElementById('set-qr').value = res.data.settings['QR_Image_URL'] || '';
                 document.getElementById('set-email').value = res.data.settings['AdminEmail'] || '';
+                document.getElementById('set-welcome-img').value = res.data.settings['Welcome_Image_URL'] || '';
+                document.getElementById('set-welcome-title').value = res.data.settings['Welcome_Title'] || '';
+                document.getElementById('set-welcome-msg').value = res.data.settings['Welcome_Message'] || '';
             } else { showAlert('ข้อผิดพลาด', res.error, 'error'); }
         }
 
@@ -518,8 +560,8 @@
             const val = document.getElementById(inputId).value;
             const res = await gasAPI('adminUpdateSetting', { adminId: currentUser.userId, key: key, value: val });
             if(res.success) {
-                showAlert('สำเร็จ', 'อัปเดตเรียบร้อยแล้ว หากเปลี่ยนชื่อ/รูป กรุณารีเฟรชหน้าเว็บ', 'success');
-                loadInitialData();
+                showAlert('สำเร็จ', 'อัปเดตเรียบร้อยแล้ว หากเปลี่ยนรูป/ชื่อ กรุณารีเฟรชหน้าเว็บใหม่', 'success');
+                loadInitialData(); // โหลดข้อมูลใหม่ทันที
             }
         }
 
@@ -554,9 +596,6 @@
             }
         }
 
-        // ==========================================
-        // ฟังก์ชันดึง API โชว์สินค้ารวมทุกหมวดหมู่
-        // ==========================================
         async function openApiSyncModal() {
             document.getElementById('api-sync-modal').classList.remove('hidden');
             const tbody = document.getElementById('api-product-list');
@@ -594,11 +633,10 @@
                         `;
                     });
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500 font-medium">ไม่มีรายการสินค้าจาก API (หรือรูปแบบข้อมูลไม่รองรับ)</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500 font-medium">ไม่มีรายการสินค้าจาก API</td></tr>`;
                 }
             } else {
-                const errorMsg = res.error || "เกิดข้อผิดพลาดในการดึงข้อมูล";
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500 font-bold">เชื่อมต่อ API ล้มเหลว สาเหตุ: <br><span class="text-sm font-normal text-gray-600">${errorMsg}</span></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500 font-bold">เชื่อมต่อ API ล้มเหลว สาเหตุ: <br><span class="text-sm font-normal text-gray-600">${res.error}</span></td></tr>`;
             }
         }
 
@@ -621,7 +659,7 @@
             priceInput.classList.add('ring-2', 'ring-yellow-400');
             setTimeout(() => priceInput.classList.remove('ring-2', 'ring-yellow-400'), 2000);
             
-            showAlert('นำเข้าสำเร็จ', 'ข้อมูลถูกคัดลอกลงฟอร์มแล้ว กรุณา "ตั้งราคาขาย" (บวกกำไร) ก่อนกดบันทึกเข้าร้าน', 'info');
+            showAlert('นำเข้าสำเร็จ', 'ข้อมูลถูกคัดลอกลงฟอร์มแล้ว กรุณาตั้งราคาขายก่อนบันทึก', 'info');
         }
     </script>
 </body>
