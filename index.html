@@ -260,7 +260,7 @@
     </div>
 
     <script>
-        // *** อย่าลืมตรวจสอบว่าลิงก์ Web App ตรงนี้ตรงกับเวอร์ชันล่าสุดหรือไม่ ***
+        // *** เช็ค URL ตัวนี้ให้ตรงกับ Web App ที่ Deploy ออกมาใหม่ด้วยนะครับ ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzw9hqCs-Lx8xBXDAWW3QEnpKdaD3wy65QeLwB5F_BYllGYc93q3H-zpfMwCMlPZ-UJ4w/exec'; 
 
         let currentUser = JSON.parse(localStorage.getItem('userSession')) || null;
@@ -555,34 +555,40 @@
         }
 
         // ==========================================
-        // ฟังก์ชันดึง API ที่แก้ไขการอ่านข้อมูล (Data Mapping) แล้ว
+        // ฟังก์ชันดึง API โชว์สินค้ารวมทุกหมวดหมู่
         // ==========================================
         async function openApiSyncModal() {
             document.getElementById('api-sync-modal').classList.remove('hidden');
             const tbody = document.getElementById('api-product-list');
-            tbody.innerHTML = '<tr><td colspan="3" class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> กำลังเชื่อมต่อและโหลดข้อมูล API...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> กำลังโหลดข้อมูล OTP, แพ็กเกจ และเกมส์...</td></tr>';
             
             const res = await gasAPI('adminFetchAPI', { adminId: currentUser.userId });
             
             if(res.success === true) {
                 tbody.innerHTML = '';
-                
-                // ดึงข้อมูลผ่าน res.data.apiProducts
                 const products = res.data.apiProducts; 
                 
                 if(products && products.length > 0) {
                     products.forEach(p => {
-                        // จับคู่ตัวแปรใหม่ให้ตรงกับที่ otp24hr ส่งมา (รองรับทั้ง OTP และแพ็กเกจ)
                         const id = p.type_code || p.type || p.id || 'ไม่มีรหัส';
                         const name = p.name || p.app || p.namegame || 'ไม่มีชื่อสินค้า';
                         const cost = p.price || p.price_ori || p.cost || 0;
+                        const apiCat = p._apiCategory || 'otp'; 
                         
+                        let badgeHtml = '';
+                        if(apiCat === 'otp') badgeHtml = '<span class="bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded text-[10px] mr-1">OTP</span>';
+                        if(apiCat === 'pack') badgeHtml = '<span class="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded text-[10px] mr-1">แพ็กเกจ</span>';
+                        if(apiCat === 'game') badgeHtml = '<span class="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px] mr-1">เกม</span>';
+
                         tbody.innerHTML += `
-                            <tr class="hover:bg-pink-50 transition">
-                                <td class="p-3 font-medium text-gray-700">${name} <br><span class="text-[10px] text-gray-400">Code: ${id}</span></td>
-                                <td class="p-3 text-center text-pink-600 font-bold">฿${cost}</td>
+                            <tr class="hover:bg-pink-50 transition border-b border-pink-50">
+                                <td class="p-3 font-medium text-gray-700 leading-tight">
+                                    <div class="mb-1">${badgeHtml} ${name}</div>
+                                    <span class="text-[10px] text-gray-400">Code: ${id}</span>
+                                </td>
+                                <td class="p-3 text-center text-pink-600 font-bold whitespace-nowrap">฿${cost}</td>
                                 <td class="p-3 text-center">
-                                    <button onclick="importApiProduct('${id}', '${name}', ${cost})" class="bg-pink-100 text-pink-600 hover:bg-pink-200 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow-sm"><i class="fas fa-download"></i> นำเข้าร้าน</button>
+                                    <button onclick="importApiProduct('${id}', '${name.replace(/'/g, "\\'")}', ${cost}, '${apiCat}')" class="bg-pink-100 text-pink-600 hover:bg-pink-200 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow-sm whitespace-nowrap"><i class="fas fa-download"></i> นำเข้า</button>
                                 </td>
                             </tr>
                         `;
@@ -596,16 +602,17 @@
             }
         }
 
-        function importApiProduct(id, name, cost) {
+        function importApiProduct(id, name, cost, apiCat) {
             closeModal('api-sync-modal');
             document.getElementById('ap-id').value = id;
             document.getElementById('ap-name').value = name;
             document.getElementById('ap-price').value = cost; 
             
-            // ตั้งค่าเริ่มต้นเป็นหมวดหมู่ OTP
-            document.getElementById('ap-category').value = 'otp';
+            if(apiCat === 'pack') document.getElementById('ap-category').value = 'app'; 
+            else if(apiCat === 'game') document.getElementById('ap-category').value = 'game'; 
+            else document.getElementById('ap-category').value = 'otp'; 
             
-            document.getElementById('ap-details').value = 'ดึงมาจากระบบ API';
+            document.getElementById('ap-details').value = `ดึงมาจากระบบ API (${apiCat.toUpperCase()})`;
             document.getElementById('ap-info').value = 'ส่งคำสั่งซื้ออัตโนมัติ';
             
             document.getElementById('form-add-product').scrollIntoView({ behavior: 'smooth' });
